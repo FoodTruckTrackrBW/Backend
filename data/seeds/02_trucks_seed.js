@@ -8,7 +8,8 @@ exports.seed = function(knex) {
 
   .then( function() {
     return knex('trucks_table').insert([
-      {owner_id: 1, truck_name: 'joes truck', truck_img_url: truckImg, cuisine_type: 'food', departure_time: '09:30:00'}
+      {owner_id: 1, truck_name: 'joes truck', truck_img_url: truckImg, cuisine_type: 'food', departure_time: '09:30:00'},
+      {owner_id: 1, truck_name: 'jims truck', truck_img_url: truckImg, cuisine_type: 'food', departure_time: '09:30:00'}
     ])
   })
   
@@ -17,7 +18,10 @@ exports.seed = function(knex) {
   })
   .then( function () {
     return knex('visited_trucks').insert([
-      { diner_id: 2, rating: 4, favorite: true, truck_id: 1}
+      { diner_id: 2, rating: 4, favorite: true, truck_id: 1},
+      { diner_id: 2, rating: 4, favorite: true, truck_id: 2},
+      { diner_id: 3, rating: 4, favorite: true, truck_id: 2},
+      { diner_id: 3, rating: 4, favorite: true, truck_id: 1}
     ])
   })
   .then( function () {
@@ -26,7 +30,9 @@ exports.seed = function(knex) {
   .then( function () {
     return knex('items').insert([
       { truck_id: 1, item_name: 'spaghetti', item_description: 'its spaghetti', item_photo_url: spaghetti, item_price: 1.99},
-      { truck_id: 1, item_name: ' more spaghetti', item_description: 'its still spaghetti', item_photo_url: spaghetti, item_price: 1.99}
+      { truck_id: 1, item_name: ' more spaghetti', item_description: 'its still spaghetti', item_photo_url: spaghetti, item_price: 1.99},
+      { truck_id: 2, item_name: 'spaghetti', item_description: 'its spaghetti', item_photo_url: spaghetti, item_price: 1.99},
+      { truck_id: 2, item_name: ' more spaghetti', item_description: 'its still spaghetti', item_photo_url: spaghetti, item_price: 1.99}
 
     ])
   })
@@ -36,7 +42,11 @@ exports.seed = function(knex) {
   .then( function () {
     return knex('diner_item_ratings').insert([
       { diner_id: 2, item_id: 1, rating: 2},
-      { diner_id: 2, item_id: 2, rating: 5}
+      { diner_id: 2, item_id: 2, rating: 5},
+      { diner_id: 3, item_id: 1, rating: 2},
+      { diner_id: 3, item_id: 2, rating: 5},
+      { diner_id: 2, item_id: 3, rating: 2},
+      { diner_id: 2, item_id: 4, rating: 5}
     ])
   })
     

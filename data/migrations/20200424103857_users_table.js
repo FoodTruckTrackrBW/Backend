@@ -87,6 +87,12 @@ exports.up = function(knex) {
         tbl.integer('rating')
             .notNullable()
     })
+    .alterTable('visited_trucks', function(t){
+        t.unique(['diner_id','truck_id'])
+    })
+    .alterTable('diner_item_ratings', function(t){
+        t.unique(['diner_id','item_id'])
+    })
 };
 
 exports.down = function(knex) {

@@ -5,7 +5,10 @@ const auth = require('./auth-model.js')
 const { generateToken, dinerRegister } = require('../../middleware/middleware.js')
 
 
-
+// Post must include username, email, password, and user_type
+// if the user_type = diner then the user must specify a favorite_cuisine_type
+// this check should be enforced on the front end as well
+// user password will be hashed and stored that way. 
 server.post('/register', dinerRegister,  (req, res) => {
     let newUser = req.body
     const hash = bcrypt.hashSync( newUser.password, 12)
@@ -16,8 +19,10 @@ server.post('/register', dinerRegister,  (req, res) => {
     })
 })
 
+
+// Post must include username, and password
+// if the user exists it will return a token that includes their userId, username, and userType
 server.post('/login', (req, res) => {
-   
     let {username, password} = req.body
     auth.findBy({ username })
     .then(found => {
