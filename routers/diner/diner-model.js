@@ -72,6 +72,6 @@ function visitUpdate(truck){
 // allows users to insert a rating for an item they've had at a truck
 // rating should be passed in with an object including the diners id from their decoded JWT, and the item id 
 function itemRating(item){
-    return db('diner_item_rating')
+    return db('diner_item_ratings')
     .insert(item)
 }

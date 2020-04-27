@@ -82,6 +82,9 @@ server.post('/:id/menu/:itemId', (req,res) => {
     item.item_id = req.params.itemId
     item.diner_id = req.decodedToken.userId
     item.rating = req.body.rating
+    if(req.body.rating > 5 || req.body.rating < 0) {
+        res.status(401).json({message: "user rating must be within 0-5"})
+    } 
     diner.itemRating(item)
     .then( success => {
         res.status(201).json({message: "user successfully updated favorites"})
