@@ -29,7 +29,7 @@ server.post('/login', async (req, res) => {
         // && bcrypt.compareSync(password, found.password)
         if( await found ) {
             console.log(found)
-            const token = generateToken(found)
+            const token = await generateToken(found)
             res.status(201).json({ message: "Successful Login", token: token})
         } else {
             res.status(401).json({ message: "User info does not exist or password is wrong"})
