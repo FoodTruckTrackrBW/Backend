@@ -13,8 +13,8 @@ const jwt = require('jsonwebtoken')
     const options = {
         expiresIn: '1d'
     }
-    const token = jwt.sign(payload, secret, options)
-    return token
+    return jwt.sign(payload, secret, options)
+     
 
 }
 

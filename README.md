@@ -1,1 +1,8 @@
 # Backend
+
+
+## Endpoints 
+
+### Auth
+
+

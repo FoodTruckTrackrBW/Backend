@@ -29,7 +29,7 @@ server.post('/login', (req, res) => {
         // 
         if(found && bcrypt.compareSync(password, found.password) ) {
             // console.log(found)
-            const token = await generateToken(found)
+            const token =  generateToken(found)
             // console.log("token error", token)
             res.status(201).json({ message: "Successful Login", token: token})
         } else {
