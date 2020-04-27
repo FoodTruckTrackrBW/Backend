@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 
 
 
- async function  generateToken(user){
+ function  generateToken(user){
     const payload = {
         userId: user.id,
         username: user.username,
@@ -13,7 +13,7 @@ const jwt = require('jsonwebtoken')
     const options = {
         expiresIn: '1d'
     }
-    const token = await jwt.sign(payload, secret, options)
+    const token = jwt.sign(payload, secret, options)
     return token
 
 }

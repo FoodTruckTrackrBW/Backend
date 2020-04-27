@@ -22,15 +22,15 @@ server.post('/register', dinerRegister,  (req, res) => {
 
 // Post must include username, and password
 // if the user exists it will return a token that includes their userId, username, and userType
-server.post('/login', async (req, res) => {
+server.post('/login', (req, res) => {
     let {username, password} = req.body
-    await auth.findBy({username: username})
-    .then( async (found) => {
-        // && bcrypt.compareSync(password, found.password)
-        if( await found ) {
-            console.log(found)
+    auth.findBy({username: username})
+    .then( (found) => {
+        // 
+        if(found && bcrypt.compareSync(password, found.password) ) {
+            // console.log(found)
             const token = await generateToken(found)
-            console.log(token)
+            // console.log("token error", token)
             res.status(201).json({ message: "Successful Login", token: token})
         } else {
             res.status(401).json({ message: "User info does not exist or password is wrong"})
