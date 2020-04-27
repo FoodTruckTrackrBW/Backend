@@ -33,7 +33,7 @@ server.post('/login', (req, res) => {
             res.status(401).json({ message: "User info does not exist or password is wrong"})
         }
     }) 
-    .catch(err => {  res.status(500).json({error: "somethings wrong", err})})
+    .catch(err => {  res.status(500).json({error: "somethings wrong", err, username, password})})
 })
 
 
