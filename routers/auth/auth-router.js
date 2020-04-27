@@ -26,8 +26,8 @@ server.post('/login', async (req, res) => {
     let {username, password} = req.body
     await auth.findBy({username: username})
     .then( (found) => {
-    
-        if(found && bcrypt.compareSync(password, found.password)) {
+        // && bcrypt.compareSync(password, found.password)
+        if(found ) {
             
             const token = generateToken(found)
             res.status(201).json({ message: "Successful Login", token: token})
