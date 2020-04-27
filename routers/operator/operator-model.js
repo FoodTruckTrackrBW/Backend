@@ -47,7 +47,6 @@ function getSpecificTruck(id, truckId){
         .where('owner_id', id)
         .andWhere('id', truckId)
         .first()
-        
 }
 // Operators can update their truck image, cuise_type, and departure_time
 function updateTruck(truck, truckToUpdate){

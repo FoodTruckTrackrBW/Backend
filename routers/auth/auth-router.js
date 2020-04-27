@@ -26,8 +26,8 @@ server.post('/login', (req, res) => {
     let {username, password} = req.body
     auth.findBy({ username })
     .then(found => {
-        if(found && bcrypt.compareSync(password, found.password)) {
-            const token = generateToken(found)
+        if(found && bcrypt.compareSync(password, found[0].password)) {
+            const token = generateToken(found[0])
             res.status(201).json({ message: "Successful Login", token: token})
         } else {
             res.status(401).json({ message: "User info does not exist or password is wrong"})
