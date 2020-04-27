@@ -111,6 +111,13 @@ server.get('/:id/items/:itemId', (req,res) => {
         }
     }) 
 })
+// returns a list of ratings for item
+server.get('/:id/items/:itemId/ratings', (req,res) => {
+    operator.itemRatings(req.params.itemId)
+    .then(ratings => {
+        res.status(200).json({ratings})
+    })
+})
 
 // operators can update an item from one of their trucks
 server.put('/:id/items/:itemId', (req, res)=> {
