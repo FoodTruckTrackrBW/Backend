@@ -92,7 +92,7 @@ function truckRatings(truckId){
 
 // Allows operators to view all the ratings for a specific item
 function itemRatings(itemId){
-    return db('diner_item_rating')
+    return db('diner_item_ratings')
         .select('rating')
         .where('item_id', itemId)
         
@@ -157,8 +157,3 @@ function truckSpecificItem(truck_id, item_id){
 }
 
 
-
-// view item ratings
-// function itemRatings(item){
-//     return db('')
-// }
