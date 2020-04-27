@@ -17,27 +17,27 @@ DB_URL = postgres://spiajimxwrkgmr:43d8fc0fb27a1275595b9bdec707fd5ac997ecfd860ff
 
 ### What's done 
 
-[✔] Postgres Database
-[✔] Package installation
-[✔] Server Setup
-[✔] Design Schema (https://app.dbdesigner.net/designer/schema/324127)
-[✔] Middleware for Authentication, User Routing, and Token Generation 
-[✔] Routes
-[✔] Migrations
-[✔] Data Seeding
-[✔] Code Comments
-[✔] Auth Endpoints
-[✔] Diner Endpoints
-[✔] Operator EndPoints
-[✔] Deployment
-[✔] Endpoint Testing
-[✔] Documentation
+* [✔] Postgres Database
+* [✔] Package installation
+* [✔] Server Setup
+* [✔] Design Schema (https://app.dbdesigner.net/designer/schema/324127)
+* [✔] Middleware for Authentication, User Routing, and Token Generation 
+* [✔] Routes
+* [✔] Migrations
+* [✔] Data Seeding
+* [✔] Code Comments
+* [✔] Auth Endpoints
+* [✔] Diner Endpoints
+* [✔] Operator EndPoints
+* [✔] Deployment
+* [✔] Endpoint Testing
+* [✔] Documentation
 
 ### To Do 
 
-- Test Database
-- Error Handler Middleware
-- Postgis 
+*  Test Database
+*  Error Handler Middleware
+*  Postgis 
 
 
 ## Endpoints 
@@ -46,54 +46,52 @@ DB_URL = postgres://spiajimxwrkgmr:43d8fc0fb27a1275595b9bdec707fd5ac997ecfd860ff
 
 #### What can any account do?  ✔=== Tested on Deployment
 
-[✔] Register Account
-[✔] Login to Account
-[✔] View their Account info
-[✔] Update Their Account info (Account type cannot be changed, nor can username be changed)
-[✔] Delete Their Account
+* [✔] Register Account
+* [✔] Login to Account
+* [✔] View their Account info
+* [✔] Update Their Account info (Account type cannot be changed, nor can username be changed)
+* [✔] Delete Their Account
 
 #### What can Diners do?
 
-[✔] View a list of Trucks
-[✔] View the Menu of a truck
-[✔] Check into a truck they are visiting, and save it to a list of visited trucks
-[✔] View list of visited trucks(front end should be able to filter favorite trucks)
-[✔] Rate visited trucks
-[✔] favorite visited trucks
-[✔] rate menu items
+* [✔] View a list of Trucks
+* [✔] View the Menu of a truck
+* [✔] Check into a truck they are visiting, and save it to a list of visited trucks
+* [✔] View list of visited trucks(front end should be able to filter favorite trucks)
+* [✔] Rate visited trucks
+* [✔] favorite visited trucks
+* [✔] rate menu items
 
 ##### What can Operators do?
 
-[✔] Add a truck
-[✔] Create a Menu
-[✔] View Their trucks
-[✔] View a specific truck
-[✔] View a specific item
-[✔] Update Truck location
-[✔] Update a truck's info
-[✔] Update Menu items
-[✔] View Truck Ratings
-[✔] View Item Ratings
-[✔] Delete their Trucks
-[✔] Delete items from their trucks
+* [✔] Add a truck
+* [✔] Create a Menu
+* [✔] View Their trucks
+* [✔] View a specific truck
+* [✔] View a specific item
+* [✔] Update Truck location
+* [✔] Update a truck's info
+* [✔] Update Menu items
+* [✔] View Truck Ratings
+* [✔] View Item Ratings
+* [✔] Delete their Trucks
+* [✔] Delete items from their trucks
 
 ### Endpoint Functionality to be add
 
 #### What can any account do?
 
-- reset password if forgotten(maybe)
+* reset password if forgotten(maybe)
 
 #### What can Diners do?
 
-- Query for trucks within a designated radius
+*  Query for trucks within a designated radius
 
 #### What can Opterators do?
 
---
+*  --
 
 ### Schema
-
-
 
 #### Auth
 
