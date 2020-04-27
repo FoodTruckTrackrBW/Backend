@@ -3,7 +3,9 @@ const db = require('../../data/dbConfig')
 module.exports = {
     registerUser,
     getUsers,
-    findBy
+    findBy,
+    updateAccount,
+    deleteAccount
 }
 
 
@@ -25,5 +27,20 @@ function registerUser(user) {
 function findBy(filter) {
     return db("users").where(filter).first();
   }
+
+
+// update users account
+function updateAccount(user){
+    return db('users')
+        .where({id: user.id})
+        .update(user.update)
+}
+
+//deletes user account
+function deleteAccount(user) {
+    return db('users')
+    .where({id: user})
+    .del()
+}
 
 

@@ -37,7 +37,7 @@ function getMenu(truckId){
     .where({ truck_id: truckId})
 }
 
-
+// allows users to get a list of visited trucks
 function getVisited(dinerId){
     return db('visited_trucks')
         .select('truck_name', 'truck_img_url', 'cuisine_type', 'rating', 'truck_id', 'favorite')

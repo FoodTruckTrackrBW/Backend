@@ -2,7 +2,7 @@ const express = require('express');
 const server = express.Router();
 const bcrypt = require('bcryptjs');
 const auth = require('./auth-model.js')
-const { generateToken, dinerRegister } = require('../../middleware/middleware.js')
+const { generateToken, dinerRegister, authenticator } = require('../../middleware/middleware.js')
 
 
 // Post must include username, email, password, and user_type
@@ -30,11 +30,62 @@ server.post('/login', (req, res) => {
             const token = generateToken(found)
             res.status(201).json({ message: "Successful Login", token: token})
         } else {
-            res.status(401).json({ message: "User info does not exist"})
+            res.status(401).json({ message: "User info does not exist or password is wrong"})
         }
     }) 
-    .catch(err => { console.log(err)
-        res.status(500).json({error: err})})
+    .catch(err => {  res.status(500).json({error: err})})
+})
+
+
+// Will retreive the account info of the logged in user
+server.get('/account', authenticator, (req,res) => {
+    let accountId = req.decodedToken.userId
+    auth.findBy({id: accountId})
+    .then( user => {
+        if(user){
+            res.status(200).json({user})
+        } else {
+            res.status(401).json({ message: "No user found" })
+        }
+    })
+    .catch( err => {  res.status(500).json({error: err}) })
+})
+
+
+// Allows users to submit an object with updated info for their account
+// User ID provided from their JWT token
+// User can submit an update to their favorite cuisine, email, and password. 
+// requests to change username or password will be denied
+// password changes will be rehashed before being stored
+server.put('/account', authenticator, (req,res) => {
+    let accountUpdate = {}
+    if(req.body.user_type){
+        res.status(401).json({error: "User cannot change Account Type"})
+    }
+    if(req.body.password){
+        req.body.password = bcrypt.hashSync( req.body.password, 12)
+    }
+   
+    accountUpdate.id = req.decodedToken.userId
+    accountUpdate.update = req.body
+    auth.updateAccount(accountUpdate)
+    .then( user => {
+        res.status(200).json({user})
+    })
+    .catch( err => {  res.status(500).json({error: err}) })
+})
+
+
+
+// User can delete their account. Information for ID pulled from user's JWT
+server.delete('/account', authenticator, (req,res) => {
+   
+    accountToDelete = req.decodedToken.userId
+    auth.deleteAccount(accountToDelete)
+    .then( user => {
+        res.status(200).json({user})
+    })
+    .catch( err => { res.status(500).json({error: err}) })
 })
 
 
