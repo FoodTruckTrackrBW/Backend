@@ -30,6 +30,7 @@ server.post('/login', async (req, res) => {
         if( await found ) {
             console.log(found)
             const token = await generateToken(found)
+            console.log(token)
             res.status(201).json({ message: "Successful Login", token: token})
         } else {
             res.status(401).json({ message: "User info does not exist or password is wrong"})
