@@ -25,7 +25,7 @@ function registerUser(user) {
 
 //returns the first user based on the filter
 function findBy(filter) {
-    return db("users").where(filter)
+    return db("users").where(filter).first()
   }
 
 
