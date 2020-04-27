@@ -8,7 +8,6 @@ module.exports = {
     itemRating,
     getVisited,
     getTruckRatings
-  
 }
 
 // Truck info 
@@ -61,7 +60,6 @@ function truckCheckIn(dinerCheckin){
 // include opposite favorite boolean if changing favorite, or a rating if changing rating
 function visitUpdate(truck){
     return db('visited_trucks')
-    .select('favorite')
     .where('diner_id', truck.diner_id)
     .andWhere('truck_id', truck.truck_id)
     .update(truck)
