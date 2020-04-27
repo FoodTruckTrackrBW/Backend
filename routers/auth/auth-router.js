@@ -24,7 +24,7 @@ server.post('/register', dinerRegister,  (req, res) => {
 // if the user exists it will return a token that includes their userId, username, and userType
 server.post('/login', (req, res) => {
     let {username, password} = req.body
-    auth.findBy({username})
+    auth.findBy({username: username})
     .then(found => {
         if(found && bcrypt.compareSync(password, found[0].password)) {
             const token = generateToken(found[0])
