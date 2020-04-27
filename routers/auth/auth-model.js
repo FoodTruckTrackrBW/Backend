@@ -25,7 +25,8 @@ function registerUser(user) {
 
 //returns the first user based on the filter
 async function findBy(filter) {
-    return db("users").where(filter).first()
+    const res = await db("users").where(filter).first()
+    return res
   }
 
 
