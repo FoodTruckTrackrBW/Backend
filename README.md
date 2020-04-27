@@ -2,15 +2,15 @@
 
 ## DB info
 
-Deployed postgres server
+* Deployed postgres server = https://food-truck-trackr-bw.herokuapp.com/
 
-link = ec2-52-202-146-43.compute-1.amazonaws.com
-port = 5432
-database = da09ke5i3mabc9
-username = spiajimxwrkgmr
-password = 43d8fc0fb27a1275595b9bdec707fd5ac997ecfd860ff48cc332400d8ff15832
+* link = ec2-52-202-146-43.compute-1.amazonaws.com
+* port = 5432
+* database = da09ke5i3mabc9
+* username = spiajimxwrkgmr
+* password = 43d8fc0fb27a1275595b9bdec707fd5ac997ecfd860ff48cc332400d8ff15832
 
-DB_URL = postgres://spiajimxwrkgmr:43d8fc0fb27a1275595b9bdec707fd5ac997ecfd860ff48cc332400d8ff15832@ec2-52-202-146-43.compute-1.amazonaws.com:5432/da09ke5i3mabc9
+* DB_URL = postgres://spiajimxwrkgmr:43d8fc0fb27a1275595b9bdec707fd5ac997ecfd860ff48cc332400d8ff15832@ec2-52-202-146-43.compute-1.amazonaws.com:5432/da09ke5i3mabc9
 
 
 ## Goals
