@@ -9,7 +9,9 @@ module.exports = {
     updateItem,
     truckItems,
     getSpecificTruck,
-    truckSpecificItem
+    truckSpecificItem,
+    deleteTruck,
+    deleteItem
 
 }
 
@@ -71,6 +73,14 @@ function updateTruck(truck, truckToUpdate){
    
 }
 
+
+function deleteTruck(id, truckId){
+    return db('trucks_table')
+        .where('owner_id', id)
+        .andWhere('id', truckId)
+        .del()
+}
+
 // Allows Operators to view a list of truck ratings for specific trucks they own 
 function truckRatings(truckId){
     return db('visited_trucks')
@@ -120,6 +130,14 @@ function updateItem(item, itemToUpdate){
 function truckItems(id){
     return db('items')
     .where('truck_id', id)
+}
+
+
+function deleteItem(truckId, itemId){
+    return db('items')
+    .where('truck_id', truckId)
+    .andWhere('id', itemId)
+    .del()
 }
 
 // operators can view specific menu items listed to trucks 

@@ -52,6 +52,15 @@ server.put('/:id', (req,res) => {
 })
 
 
+server.delete('/:id', (req,res) => {
+    let truck = {}
+    truck.owner_id = req.decodedToken.userId
+    truck.id = req.params.id
+    operator.deleteTruck(truck.owner_id, truck.id)
+    .then(result => res.status(201).json({message: "truck successfully deleted"}))
+})
+
+
 // Operators can retreive a list of ratings for a truck they own
 // truck id is pulled from req.params.id
 server.get('/:id/ratings', (req,res) => {
@@ -116,6 +125,20 @@ server.put('/:id/items/:itemId', (req, res)=> {
             update.body = req.body
             operator.updateItem(update, itemToUpdate)
             .then(item => {res.status(201).json({message: "item updated"})})
+            })
+        } else {
+            res.status(201).json({error: "This aint yo truck"})
+        }
+    })
+})
+
+server.delete('/:id/items/:itemId', (req,res) => {
+    operator.getSpecificTruck(req.decodedToken.userId, req.params.id)
+    .then( truck => {
+        if(truck.owner_id === req.decodedToken.userId){
+            operator.deleteItem(req.params.id, req.params.itemId)
+            .then(item => {
+                res.status(201).json({message: "item successfully deleted"})
             })
         } else {
             res.status(201).json({error: "This aint yo truck"})
