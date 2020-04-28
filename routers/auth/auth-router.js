@@ -4,12 +4,24 @@ const bcrypt = require('bcryptjs');
 const auth = require('./auth-model.js')
 const { generateToken, dinerRegister, authenticator } = require('../../middleware/middleware.js')
 
+const knexPostgis = require("knex-postgis");
+const db = require('../../data/dbConfig.js');
+// install postgis functions in knex.postgis;
+const st = knexPostgis(db);
+
+function generateLocation(lat,long) {
+  return st.setSRID(st.makePoint(lat, long), 4326)
+}
+//read env variables
+require('dotenv').config();
+
 
 // Post must include username, email, password, and user_type
 // if the user_type = diner then the user must specify a favorite_cuisine_type
 // this check should be enforced on the front end as well
 // user password will be hashed and stored that way. 
 server.post('/register', dinerRegister,  (req, res) => {
+    req.body.user_location = req.body.user_lat && req.body.user_long ? generateLocation(req.body.user_lat, req.body.user_long) : null;
     let newUser = req.body
     const hash = bcrypt.hashSync( newUser.password, 12)
     newUser.password = hash
@@ -36,7 +48,9 @@ server.post('/login', (req, res) => {
             res.status(401).json({ message: "User info does not exist or password is wrong"})
         }
     }) 
-    .catch(err => {  res.status(500).json({error: "somethings wrong", err, username, password})})
+    .catch(err => {
+        res.status(500).json({error: "somethings wrong", err, username, password})
+    })
 })
 
 

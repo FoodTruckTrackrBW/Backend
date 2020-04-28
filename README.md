@@ -61,6 +61,8 @@
 * [✔] Rate visited trucks
 * [✔] favorite visited trucks
 * [✔] rate menu items
+* [✔] get Trucks within given distance - 10 miles by default
+* [✔] get Trucks by Cuisine Type - diner's favorite cuisine by default
 
 ##### What can Operators do?
 
@@ -83,10 +85,6 @@
 
 * reset password if forgotten(maybe)
 
-#### What can Diners do?
-
-*  Query for trucks within a designated radius
-
 #### What can Opterators do?
 
 *  --
@@ -104,7 +102,10 @@ POST to
 	"email": "<email>",
 	"user_type": "<operator||diner>",
 	(only if diner)
-	"favorite_cuisine_type": "<cuisine_type>"
+    "favorite_cuisine_type": "<cuisine_type>",
+    (optional, required for diners if querying trucks by distance)
+    "user_lat": "<latitude>",
+    "user_long":"<longitude>"
 }
 ```
 
@@ -170,7 +171,9 @@ takes
 	"truck_name": "<truck_name>",
 	"truck_img_url": "<img_url>", // Optional
 	"cuisine_type": "<cuisine_type>",
-	"departure_time": "<time in hh:mm:ss format>"
+    "departure_time": "<time in hh:mm:ss format>",
+    "truck_lat": "<latitude>", // Optional
+    "truck_long": "<longitude>" // Optional
 }
 ```
 
@@ -394,6 +397,45 @@ returns
             "item_photo_url": "https://images.unsplash.com/photo-1572441713132-c542fc4fe282?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1000&q=80",
             "item_price": 1.99
         }
+    ]
+}
+```
+
+GET to 
+/diner/trucksNearMe
+requires - radius in request - 10 miles by default
+returns
+```javascript
+{
+    [
+        {
+            "truck_name": "XYZ"
+            "truck_img_url": " https://images.unsplash.com/photo-1574280363402-2f672940b871?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=934&q=80",
+            "cuisine_type": "food",
+            "departure_time": "09:30:00",
+            "distanceAway": "4589.3"
+        },
+        ...
+    ]
+}
+```
+distanceAway is in meters - to be converted to meters by Front End
+
+GET to
+/diner/trucksByCuisine
+requires - cuisine in request - diner's favorite cuisine by default
+returns - 
+```javascript
+{
+    [
+        {
+            "truck_name": "XYZ"
+            "truck_img_url": " https://images.unsplash.com/photo-1574280363402-2f672940b871?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=934&q=80",
+            "cuisine_type": "food",
+            "departure_time": "09:30:00",
+            "distanceAway": "4589.3"
+        },
+        ...
     ]
 }
 ```

@@ -91,4 +91,23 @@ server.post('/:id/menu/:itemId', (req,res) => {
     })
 })
 
+// allows user to filter trucks in a given radius(miles) - default 10 miles
+server.get('/trucksNearMe', (req, res) => {
+    const radius = req.body.radius ? req.body.radius : 10
+    diner.getTrucksNearMe(req.decodedToken.userId, radius)
+        .then(trucks => {
+            res.status(201).json(trucks)
+        })
+        .catch(err => res.status(500).json(err));
+})
+
+// allows user to filter trucks by cuisine(optional - default to diner's favorite cuisine)
+server.get('/trucksByCuisine', (req, res) => {
+    diner.getTrucksByCuisine(req.decodedToken.userId, req.body.cuisine)
+        .then(trucks => {
+            res.status(201).json(trucks)
+        })
+        .catch(err => res.status(500).json(err));
+})
+
 module.exports = server

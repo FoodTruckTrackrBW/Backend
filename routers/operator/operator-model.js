@@ -16,8 +16,6 @@ module.exports = {
 
 }
 
-
-
 // Operators can add a truck
 // Requires a truck_name, truck_img_url, cuisine_type, and departure_time be given
 // owner id will be added via the users JWT
@@ -27,6 +25,9 @@ function registerTruck(truck){
         , truck_img_url
         , cuisine_type
         , departure_time
+        , truck_lat
+        , truck_long
+        , truck_location
         } = truck
     return db('trucks_table')
         .insert({owner_id
@@ -34,6 +35,9 @@ function registerTruck(truck){
             , truck_img_url
             , cuisine_type
             , departure_time
+            , truck_lat
+            , truck_long
+            , truck_location
         })
 }
 

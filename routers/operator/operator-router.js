@@ -25,6 +25,18 @@ server.get('/:id', (req,res) => {
 // User Id is taken from operators JWT
 server.post('/', (req,res) => {
     req.body.owner_id = req.decodedToken.userId
+
+    const knexPostgis = require("knex-postgis");
+    // install postgis functions in knex.postgis;
+    const st = knexPostgis(db);
+
+    function generateLocation(lat,long) {
+    return st.setSRID(st.makePoint(lat, long), 4326)
+    }
+    if(req.body.truck_lat && req.body.truck_long) {
+        req.body.truck_location = generateLocation(req.body.truck_lat, req.body.truck_long)
+    }
+
     operator.registerTruck(req.body)
     .then( truck => {
         res.status(201).json({message: "truck has been added"})
