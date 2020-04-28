@@ -11,7 +11,10 @@ const server = express();
 
 
 
-app.use((req, res, next) => {
+
+server.use(express.json());
+server.use(cors());
+server.use((req, res, next) => {
 
     res.header("Access-Control-Allow-Origin",  '*');
 
@@ -22,9 +25,6 @@ app.use((req, res, next) => {
 
     next(); 
 });
-
-server.use(express.json());
-server.use(cors());
 server.use('/api/diner', authenticator, diner,  dinerRouter);
 server.use('/api/operator', authenticator, operator, operatorRouter);
 server.use('/api/auth', authRouter);
