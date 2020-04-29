@@ -1,4 +1,8 @@
 const db = require('../../data/dbConfig')
+const knexPostgis = require("knex-postgis");
+// install postgis functions in knex.postgis;
+const st = knexPostgis(db);
+
 
 module.exports = {
     getTrucks, 
@@ -12,7 +16,8 @@ module.exports = {
     truckSpecificItem,
     deleteTruck,
     deleteItem,
-    itemRatings
+    itemRatings,
+    generateLocation
 
 }
 
@@ -161,3 +166,7 @@ function truckSpecificItem(truck_id, item_id){
 }
 
 
+
+    function generateLocation(lat,long) {
+    return st.setSRID(st.makePoint(lat, long), 4326)
+    }

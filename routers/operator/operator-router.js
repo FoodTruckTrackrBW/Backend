@@ -2,6 +2,7 @@ const express = require('express');
 const server = express.Router();
 const operator = require('./operator-model.js')
 
+
 // this route will only work if the logged in user's type is Operator
 
 // Operators can see a list of trucks they own based on their user_id
@@ -26,15 +27,9 @@ server.get('/:id', (req,res) => {
 server.post('/', (req,res) => {
     req.body.owner_id = req.decodedToken.userId
 
-    const knexPostgis = require("knex-postgis");
-    // install postgis functions in knex.postgis;
-    const st = knexPostgis(db);
-
-    function generateLocation(lat,long) {
-    return st.setSRID(st.makePoint(lat, long), 4326)
-    }
+    
     if(req.body.truck_lat && req.body.truck_long) {
-        req.body.truck_location = generateLocation(req.body.truck_lat, req.body.truck_long)
+        req.body.truck_location = operator.generateLocation(req.body.truck_lat, req.body.truck_long)
     }
 
     operator.registerTruck(req.body)
