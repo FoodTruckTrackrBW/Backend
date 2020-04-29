@@ -19,8 +19,7 @@ function getUsers(){
 function registerUser(user) {
     return db('users')
     .insert(user, 'id')
-    .then(user => ({user}))
-    .catch(error => console.log(error));
+    .then(user => ({user}));
 }
 
 
