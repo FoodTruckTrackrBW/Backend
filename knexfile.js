@@ -4,7 +4,7 @@ module.exports = {
 
   development: {
     client: "pg",
-    connection: 'postgresql://postgres:145900Qq@localhost:5432/FoodTruck',
+    connection: process.env.DB_URL,
     useNullAsDefault: true,
 
     migrations: {
