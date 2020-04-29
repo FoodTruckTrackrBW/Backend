@@ -438,7 +438,8 @@ describe('Trucks by Cuisine', function() {
                 // expect a list of trucks
                 expect(res.body.trucks).toBeDefined();
 
-                //expect the trucks cuisine type to match mexican
+                // expect(res.body.trucks).toHaveLength(1);
+                // expect the trucks cuisine type to match mexican
                 expect(res.body.trucks[0].cuisine_type).toBe('mexican');
             });
     });
