@@ -1,8 +1,11 @@
 # Backend
 
-## DB info
+## API Info
 
-* Deployed postgres server = https://food-truck-trackr-bw.herokuapp.com/api
+* Documentation link = https://documenter.getpostman.com/view/10964430/SzfDy67Z?version=latest
+* Deployed API = https://food-truck-trackr-bw.herokuapp.com/api
+
+## DB info
 
 * link = ec2-52-202-146-43.compute-1.amazonaws.com
 * port = 5432
@@ -32,12 +35,14 @@
 * [✔] Deployment
 * [✔] Endpoint Testing
 * [✔] Documentation
+* [✔] Test Database
+* [✔] Error Handler Middleware
+* [✔] Postgis 
 
 ### To Do 
 
-*  Test Database
-*  Error Handler Middleware
-*  Postgis 
+* Test Operator Endpoints
+
 
 
 ## Endpoints 
@@ -81,372 +86,15 @@
 
 ### Endpoint Functionality to be add
 
-#### What can any account do?
+#### What can't any account do?
 
 * reset password if forgotten(maybe)
 
-#### What can Opterators do?
+#### What can't Diners do?
+
+* --
+
+#### What can't Operators do?
 
 *  --
 
-### Schema
-
-#### Auth
-
-POST to
-/auth/register
-```javascript
-{
-	"username":"<username>",
-	"password": "<password>",
-	"email": "<email>",
-	"user_type": "<operator||diner>",
-	(only if diner)
-    "favorite_cuisine_type": "<cuisine_type>",
-    (optional, required for diners if querying trucks by distance)
-    "user_lat": "<latitude>",
-    "user_long":"<longitude>"
-}
-```
-
-POST to
-/auth/login
-```javascript
-{
-	"username":	"testAccount2",
-	"password": "password"
-}
-```
-Above endpoint returns a token used to access all other routes
-
-All routes after login require the following header
-```javascript
-{
-	"Authorization": "<token>"
-}
-```
-
-GET to
-/auth/account/
-```javascript
-{
-    "user": {
-        "id": <user_id>,
-        "username": "<username>",
-        "email": "<email>",
-        "password": "<hashed password>",
-        "user_type": "<operator||diner>",
-        "favorite_cuisine_type": "<cuisine_type||null>""
-    }
-}
-```
-
-
-#### Operator
-
-
-GET to
-/operator/
-```javascript
-{
-    "trucks": [
-        {
-            "id": <truck_id>,
-            "owner_id": <user_id>,
-            "truck_name": "<truck_name>",
-            "truck_img_url": "<img_url>",
-            "cuisine_type": "<trucks_cuisine_type>",
-            "departure_time": "<time>"
-        },
-        ...
-    ]
-}
-```
-
-POST to
-/operator/
-takes
-```javascript
-{
-	"truck_name": "<truck_name>",
-	"truck_img_url": "<img_url>", // Optional
-	"cuisine_type": "<cuisine_type>",
-    "departure_time": "<time in hh:mm:ss format>",
-    "truck_lat": "<latitude>", // Optional
-    "truck_long": "<longitude>" // Optional
-}
-```
-
-GET to
-/operator/:truckId/
-returns
-```javascript
-{
-    "truck": {
-        "id": <truck_id>,
-        "owner_id": <user_id>,
-        "truck_name": "<truck_name>",
-        "truck_img_url": "<img_url>",
-        "cuisine_type": "<trucks_cuisine_type>",
-        "departure_time": "<time>"
-    }
-}
-```
-
-PUT to
-/operator/:truckId/
-takes any of the following
-```javascript
-{
-		"truck_name": "<truck_name>",
-        "truck_img_url": "<img_url>",
-        "cuisine_type": "<trucks_cuisine_type>",
-        "departure_time": "<time>"
-}
-```
-returns
-```javascript
-{
-    "message": "truck has been updated"
-}
-```
-
-Delete to
-/operator/:truckId/
-returns
-```javascript
-
-{
-    "message": "truck successfully deleted"
-}
-```
-needs condition for if truck doesnt exist
-
-GET to
-/operator/:truckId/items/
-returns
-```javascript
-{
-    "items": [
-        {
-            "id": <item_id>,
-            "truck_id": <truck_id>,
-            "item_name": "<item_name>",
-            "item_description": "<item_description>",
-            "item_photo_url": "<img_url>",
-            "item_price": <price>
-        },
-        ...
-    ]
-}
-```
-
-
-POST to 
-/operator/:truckId/items/
-takes
-```javascript
-{
-	"item_name": "<item_name>",
-	"item_description": "<item_description>",
-	"item_photo_url": "<img_url>",
-	"item_price": <price>
-}
-```
-returns
-```javascript
-{
-    "message": "item created"
-}
-```
-
-GET to
-/operator/:truckId/items/:itemId
-```javascript
-{
-    "items": [
-        {
-            "id": <item_id>,
-            "truck_id": <truck_id>,
-            "item_name": "<item_name>",
-            "item_description": "<item_description>",
-            "item_photo_url": "<img_url>",
-            "item_price": <price>
-        }
-    ]
-}
-```
-
-PUT to
-/operator/:truckId/items/:itemId
-takes any of the following
-```javascript
-{
-            "item_name": "<item_name>",
-            "item_description": "<item_description>",
-            "item_photo_url": "<img_url>",
-            "item_price": <price>
-}
-```
-returns
-```javascript
-{
-	"item_name": "update test"
-}
-```
-
-DELETE to
-/operator/:truckId/items/:itemId
-returns
-```javascript
-{
-    "message": "item successfully deleted"
-}
-```
-needs condition for if item doesnt exist
-
-
-GET to
-/operator/:truckId/ratings
-returns
-```javascript
-{
-    "ratings": []
-}
-```
-
-GET to
-/operator/:truckId/items/:itemId/ratings
-```javascript
-{
-    "ratings": []
-}
-```
-
-#### Diner
-
-GET to
-/diner/
-returns
-```javascript
-{
-    "trucks": [
-        {
-            "truck_name": "joes truck",
-            "truck_img_url": " https://images.unsplash.com/photo-1574280363402-2f672940b871?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=934&q=80",
-            "cuisine_type": "food",
-            "departure_time": "09:30:00"
-        },
-        {
-            "truck_name": "jims truck",
-            "truck_img_url": " https://images.unsplash.com/photo-1574280363402-2f672940b871?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=934&q=80",
-            "cuisine_type": "food",
-            "departure_time": "09:30:00"
-        },
-        ...
-    ]
-}
-```
-
-POST to
-/diner/:truckid/checkin
-returns
-```javascript
-{
-    "message": "user successfully checked in"
-}
-```
-
-GET to
-/diner/visited
-returns
-```javascript
-{
-    "visited": [
-        {
-            "truck_name": "joes truck",
-            "truck_img_url": " https://images.unsplash.com/photo-1574280363402-2f672940b871?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=934&q=80",
-            "cuisine_type": "food",
-            "rating": "No Diner Rating",
-            "truck_id": 1,
-            "favorite": false
-        }
-    ]
-}
-```
-
-GET to
-/diner/:truckId/menu
-returns
-```javascript
-{
-    "menu": [
-        {
-            "id": 1,
-            "truck_id": 1,
-            "item_name": "spaghetti",
-            "item_description": "its spaghetti",
-            "item_photo_url": "https://images.unsplash.com/photo-1572441713132-c542fc4fe282?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1000&q=80",
-            "item_price": 1.99
-        },
-        {
-            "id": 2,
-            "truck_id": 1,
-            "item_name": " more spaghetti",
-            "item_description": "its still spaghetti",
-            "item_photo_url": "https://images.unsplash.com/photo-1572441713132-c542fc4fe282?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1000&q=80",
-            "item_price": 1.99
-        }
-    ]
-}
-```
-
-GET to 
-/diner/trucksNearMe
-requires - radius in request - 10 miles by default
-returns
-```javascript
-{
-    [
-        {
-            "truck_name": "XYZ"
-            "truck_img_url": " https://images.unsplash.com/photo-1574280363402-2f672940b871?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=934&q=80",
-            "cuisine_type": "food",
-            "departure_time": "09:30:00",
-            "distanceAway": "4589.3"
-        },
-        ...
-    ]
-}
-```
-distanceAway is in meters - to be converted to meters by Front End
-
-GET to
-/diner/trucksByCuisine
-requires - cuisine in request - diner's favorite cuisine by default
-returns - 
-```javascript
-{
-    [
-        {
-            "truck_name": "XYZ"
-            "truck_img_url": " https://images.unsplash.com/photo-1574280363402-2f672940b871?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=934&q=80",
-            "cuisine_type": "food",
-            "departure_time": "09:30:00",
-            "distanceAway": "4589.3"
-        },
-        ...
-    ]
-}
-```
-
-POST to
-/diner/:truckId/updateVist
-takes
-```javascript
-{
-	"rating": <integer between 0-5>
-	or 
-	"favorite": <true||false>
-}
-```
