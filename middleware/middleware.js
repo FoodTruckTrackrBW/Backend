@@ -7,7 +7,8 @@ const jwt = require('jsonwebtoken')
     const payload = {
         userId: user.id,
         username: user.username,
-        userType: user.user_type
+        userType: user.user_type,
+        favorite_cuisine_type: user.favorite_cuisine_type || "Not Specified"
     }
     const secret = process.env.JWT_SECRET;
     const options = {
@@ -57,15 +58,7 @@ function dinerRegister(req,res,next){
     if(!username || !password || !email || !user_type) {
         res.status(400).json({error: "Please provide username, password, email and user_type to register"});
     } else {
-        if(req.body.user_type === 'diner') {
-            if(req.body.favorite_cuisine_type){
-                next();
-            } else {
-                res.status(400).json({ error: "Diners must specify favorite Cuisine type"})
-            }
-        } else {
-            next();
-        }
+         next();
     }
     
 }

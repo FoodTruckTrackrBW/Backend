@@ -18,7 +18,7 @@ module.exports = {
 //get a list of trucks
 function getTrucks(){
     return db('trucks_table')
-    .select('truck_name','truck_img_url', 'cuisine_type', 'departure_time')
+    .select('id','truck_name','truck_img_url', 'cuisine_type', 'departure_time')
 }
 
 function getTruckByID(id){
@@ -47,7 +47,7 @@ function getMenu(truckId){
 // allows users to get a list of visited trucks
 function getVisited(dinerId){
     return db('visited_trucks')
-        .select('truck_name', 'truck_img_url', 'cuisine_type', 'rating', 'truck_id', 'favorite')
+        .select('truck_id','truck_name', 'truck_img_url', 'cuisine_type', 'rating', 'truck_id', 'favorite')
         .join('trucks_table','truck_id','id')
         .where('diner_id', dinerId)
 }

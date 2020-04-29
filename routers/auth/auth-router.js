@@ -45,12 +45,10 @@ server.post('/login', (req, res) => {
     }
     auth.findBy({username: username})
     .then( (found) => {
-        // 
+        console.log(found)
         if(found && bcrypt.compareSync(password, found.password) ) {
-            // console.log(found)
             const token =  generateToken(found)
-            // console.log("token error", token)
-            res.status(201).json({ message: "Successful Login", token: token})
+            res.status(201).json({ message: "Successful Login", token: token, user: { id: found.id, user_type: found.user_type, cuisine: found.favorite_cuisine_type || "No favorite cuisine"}})
         } else {
             res.status(401).json({ message: "User info does not exist or password is wrong"})
         }
