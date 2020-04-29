@@ -9,8 +9,22 @@ const { authenticator, operator, diner} = require('../middleware/middleware.js')
 const server = express();
 
 
+
+
+
 server.use(express.json());
 server.use(cors());
+server.use((req, res, next) => {
+
+    res.header("Access-Control-Allow-Origin",  '*');
+
+    res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
+
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    res.header("Access-Control-Allow-Credentials", true);
+
+    next(); 
+});
 server.use('/api/diner', authenticator, diner,  dinerRouter);
 server.use('/api/operator', authenticator, operator, operatorRouter);
 server.use('/api/auth', authRouter);

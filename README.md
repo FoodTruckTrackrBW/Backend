@@ -2,7 +2,7 @@
 
 ## DB info
 
-* Deployed postgres server = https://food-truck-trackr-bw.herokuapp.com/
+* Deployed postgres server = https://food-truck-trackr-bw.herokuapp.com/api
 
 * link = ec2-52-202-146-43.compute-1.amazonaws.com
 * port = 5432
