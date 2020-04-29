@@ -88,7 +88,7 @@
 
 #### What can't any account do?
 
-* reset password if forgotten(maybe)
+* --
 
 #### What can't Diners do?
 
