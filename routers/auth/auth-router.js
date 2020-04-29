@@ -26,9 +26,10 @@ server.post('/register', dinerRegister,  (req, res) => {
     const hash = bcrypt.hashSync( newUser.password, 12)
     newUser.password = hash
     auth.registerUser(newUser)
-    .then(user => {
-        res.status(201).json({user})
+    .then(({user}) => {
+        res.status(201).json({message: 'Registration successful', userId: user[0]})
     })
+    .catch(err => res.status(400).json({error: err.detail}));
 })
 
 
@@ -36,6 +37,10 @@ server.post('/register', dinerRegister,  (req, res) => {
 // if the user exists it will return a token that includes their userId, username, and userType
 server.post('/login', (req, res) => {
     let {username, password} = req.body
+    if(!username || !password) {
+        res.status(400).json({error: 'Please provide username and password to login'});
+        return;
+    }
     auth.findBy({username: username})
     .then( (found) => {
         // 
@@ -60,7 +65,8 @@ server.get('/account', authenticator, (req,res) => {
     auth.findBy({id: accountId})
     .then( user => {
         if(user){
-            res.status(200).json({user})
+            user.password = "******";
+            res.status(200).json({...user})
         } else {
             res.status(401).json({ message: "No user found" })
         }
@@ -76,8 +82,13 @@ server.get('/account', authenticator, (req,res) => {
 // password changes will be rehashed before being stored
 server.put('/account', authenticator, (req,res) => {
     let accountUpdate = {}
+    if(!req.body) {
+        res.status(401).json({error: 'Please provide some information to update'});
+        return;
+    }
     if(req.body.user_type){
-        res.status(401).json({error: "User cannot change Account Type"})
+        res.status(401).json({error: "User cannot change Account Type"});
+        return;
     }
     if(req.body.password){
         req.body.password = bcrypt.hashSync( req.body.password, 12)
@@ -86,8 +97,10 @@ server.put('/account', authenticator, (req,res) => {
     accountUpdate.id = req.decodedToken.userId
     accountUpdate.update = req.body
     auth.updateAccount(accountUpdate)
-    .then( user => {
-        res.status(200).json({user})
+    .then( async success => {
+        const user = await auth.findBy({id: accountUpdate.id});
+        user.password = '******';
+        res.status(200).json(user)
     })
     .catch( err => {  res.status(500).json({error: err}) })
 })
