@@ -10,17 +10,27 @@ server.get('/', (req, res) => {
     .then( trucks => {
         res.status(200).json({trucks})
     })
+    .catch(err => res.status(500).json(err));
 })
 
+async function validateTruckID(req, res, next) {
+    let truck_id = req.params.id;
+    const truck = await diner.getTruckByID(truck_id); 
+    if(truck) {
+        next();
+    } else {
+        res.status(404).json({error: 'Invalid Truck ID'});
+    }
+}
 // will retreive a list of items sold by the truck who's id is given
-server.get('/:id/menu', (req, res) => {
+server.get('/:id/menu', validateTruckID, (req, res) => {
     let truck_id = req.params.id
     diner.getMenu(truck_id)
     .then( menu => {
         res.status(200).json({menu})
     })
+    .catch(err => res.status(500).json(err));
 })
-
 
 
 // retreives a list of trucks the diner has checked into
@@ -29,14 +39,13 @@ server.get('/visited', (req,res) => {
     diner.getVisited(dinerId)
     .then(visited => {
         visited.map(e => {
-            console.log(e)
             if(!e.rating){
                 e.rating = 'No Diner Rating'
             }
         })
-      
         res.status(200).json({visited})
     })
+    .catch(err => res.status(500).json(err));
 })
 
 // submits a checkin that registers the truck to the users visited list
@@ -48,6 +57,7 @@ server.post('/:id/checkin', (req,res) => {
     .then( success => {
         res.status(201).json({message: "user successfully checked in"})
     })
+    .catch(err => res.status(500).json(err));
 })
 
 // an update to checked in trucks that allows user to submit a rating or mark as a favorite
@@ -73,6 +83,7 @@ server.put('/:id/updateVisit', (req,res) => {
     .then( success => {
         res.status(201).json({message: "user successfully updated visit"})
     })
+    .catch(err => res.status(500).json(err));
 })
 
 
@@ -89,6 +100,26 @@ server.post('/:id/menu/:itemId', (req,res) => {
     .then( success => {
         res.status(201).json({message: "user successfully updated favorites"})
     })
+    .catch(err => res.status(500).json(err));
+})
+
+// allows user to filter trucks in a given radius(miles) - default 10 miles
+server.get('/trucksNearMe', (req, res) => {
+    const radius = req.body.radius ? req.body.radius : 10
+    diner.getTrucksNearMe(req.decodedToken.userId, radius)
+        .then(trucks => {
+            res.status(201).json(trucks)
+        })
+        .catch(err => res.status(500).json(err));
+})
+
+// allows user to filter trucks by cuisine(optional - default to diner's favorite cuisine)
+server.get('/trucksByCuisine', (req, res) => {
+    diner.getTrucksByCuisine(req.decodedToken.userId, req.body.cuisine)
+        .then(trucks => {
+            res.status(201).json(trucks)
+        })
+        .catch(err => res.status(500).json(err));
 })
 
 module.exports = server

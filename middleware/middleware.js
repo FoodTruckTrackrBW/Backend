@@ -53,15 +53,21 @@ function  diner(req,res,next){
 };
 
 function dinerRegister(req,res,next){
-    if(req.body.user_type === 'diner') {
-        if(req.body.favorite_cuisine_type){
-            next();
-        } else {
-            res.status(400).json({ error: "Diners must specify favorite Cuisine type"})
-        }
+    const { username, password, email, user_type } = req.body;
+    if(!username || !password || !email || !user_type) {
+        res.status(400).json({error: "Please provide username, password, email and user_type to register"});
     } else {
-        next();
+        if(req.body.user_type === 'diner') {
+            if(req.body.favorite_cuisine_type){
+                next();
+            } else {
+                res.status(400).json({ error: "Diners must specify favorite Cuisine type"})
+            }
+        } else {
+            next();
+        }
     }
+    
 }
 
 

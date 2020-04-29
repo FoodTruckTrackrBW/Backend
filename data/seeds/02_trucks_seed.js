@@ -1,4 +1,12 @@
+const knex = require("knex");
+const knexPostgis = require("knex-postgis");
+const db = require('../dbConfig.js');
+// install postgis functions in knex.postgis;
+const st = knexPostgis(db);
 
+function generateLocation(lat,long) {
+  return st.setSRID(st.makePoint(lat, long), 4326)
+}
 exports.seed = function(knex) {
   const truckImg = ' https://images.unsplash.com/photo-1574280363402-2f672940b871?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=934&q=80'
   const spaghetti =  'https://images.unsplash.com/photo-1572441713132-c542fc4fe282?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1000&q=80'

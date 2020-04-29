@@ -13,6 +13,11 @@ exports.up = function(knex) {
         tbl.text('user_type')
             .notNullable()
         tbl.text('favorite_cuisine_type')
+        tbl.decimal('user_lat')
+            .unsigned()
+        tbl.decimal('user_long')
+            .unsigned()
+        tbl.specificType('user_location', 'geometry(point, 4326)')
     })
     .createTable('trucks_table', tbl => {
         tbl.increments();
@@ -31,6 +36,23 @@ exports.up = function(knex) {
             .notNullable()
         tbl.time('departure_time')
             .notNullable()
+        tbl.decimal('truck_lat')
+            .unsigned()
+        tbl.decimal('truck_long')
+            .unsigned()
+        tbl.specificType('truck_location', 'geometry(point, 4326)')
+    })
+    .createTable('truck_locations', tbl => {
+        tbl.integer('truck_id')
+            .unsigned()
+            .notNullable()
+            .references('id')
+            .inTable('trucks_table')
+            .onUpdate('CASCADE')
+            .onDelete('CASCADE')
+        tbl.date('next-location-date')
+            .notNullable()
+        tbl.specificType('next-location', 'geometry(point, 4326)')
     })
     .createTable('visited_trucks', tbl => {
         tbl.integer('diner_id')
@@ -100,6 +122,7 @@ exports.down = function(knex) {
     .dropTableIfExists('diner_item_ratings')
     .dropTableIfExists('items')
     .dropTableIfExists('visited_trucks')
+    .dropTableIfExists('truck_locations')
     .dropTableIfExists('trucks_table')
     .dropTableIfExists('users')
 };
