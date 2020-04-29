@@ -2,6 +2,7 @@ const db = require('../../data/dbConfig')
 
 module.exports = {
     getTrucks,
+    getTruckByID,
     getMenu,
     truckCheckIn,
     visitUpdate,
@@ -20,6 +21,11 @@ function getTrucks(){
     .select('truck_name','truck_img_url', 'cuisine_type', 'departure_time')
 }
 
+function getTruckByID(id){
+    return db('trucks_table')
+    .where({id})
+    .first();   
+}
 
 //get a list of truck ratings by passing in the trucks id
 // truckId should be obtained from req.params.id

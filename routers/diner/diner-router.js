@@ -13,8 +13,17 @@ server.get('/', (req, res) => {
     .catch(err => res.status(500).json(err));
 })
 
+async function validateTruckID(req, res, next) {
+    let truck_id = req.params.id;
+    const truck = await diner.getTruckByID(truck_id); 
+    if(truck) {
+        next();
+    } else {
+        res.status(404).json({error: 'Invalid Truck ID'});
+    }
+}
 // will retreive a list of items sold by the truck who's id is given
-server.get('/:id/menu', (req, res) => {
+server.get('/:id/menu', validateTruckID, (req, res) => {
     let truck_id = req.params.id
     diner.getMenu(truck_id)
     .then( menu => {
@@ -22,7 +31,6 @@ server.get('/:id/menu', (req, res) => {
     })
     .catch(err => res.status(500).json(err));
 })
-
 
 
 // retreives a list of trucks the diner has checked into
