@@ -163,6 +163,7 @@ function truckSpecificItem(truck_id, item_id){
     return db('items')
     .where('truck_id', truck_id)
     .andWhere('id', item_id)
+    .first();
 }
 
 

@@ -29,7 +29,6 @@ server.post('/register', dinerRegister,  (req, res) => {
     .then(({user}) => {
         res.status(201).json({message: 'Registration successful', userId: user[0]})
     })
-
     .catch(err => res.status(400).json({error: err.detail}));
 
 })
@@ -45,7 +44,7 @@ server.post('/login', (req, res) => {
     }
     auth.findBy({username: username})
     .then( (found) => {
-        console.log(found)
+        // console.log(found)
         if(found && bcrypt.compareSync(password, found.password) ) {
             const token =  generateToken(found)
             res.status(201).json({ message: "Successful Login", token: token, user: { id: found.id, user_type: found.user_type, cuisine: found.favorite_cuisine_type || "No favorite cuisine"}})

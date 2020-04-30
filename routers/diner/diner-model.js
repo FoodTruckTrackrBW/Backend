@@ -10,7 +10,8 @@ module.exports = {
     getVisited,
     getTruckRatings,
     getTrucksNearMe,
-    getTrucksByCuisine
+    getTrucksByCuisine,
+    getItemByID
 }
 
 // Truck info 
@@ -80,12 +81,23 @@ function visitUpdate(truck){
 function itemRating(item){
     return db('diner_item_ratings')
     .insert(item)
+    .then(res => {
+        return res;
+    })
+    .catch(err => {
+        return db('diner_item_ratings')
+            .where('diner_id', item.diner_id)
+            .andWhere('item_id', item.item_id)
+            .update('rating', item.rating);
+    })
 }
 
 async function getTrucksNearMe(diner_id, radius){
     const rad = 1609.34 * radius
     const diner = await db('users').where({id: diner_id}).first();
-    
+    if (!diner.user_location) {
+        return {message: 'No location defined for the diner'};
+    }
     const knexPostgis = require('knex-postgis');
     const st = knexPostgis(db);
 
@@ -103,4 +115,10 @@ async function getTrucksByCuisine(diner_id, cuisine){
     return db('trucks_table')
         .select('truck_name','truck_img_url', 'cuisine_type', 'departure_time')
         .where({cuisine_type: cuisine});
+}
+
+function getItemByID(id){
+    return db('items')
+        .where({id})
+        .first();
 }

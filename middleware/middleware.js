@@ -58,7 +58,11 @@ function dinerRegister(req,res,next){
     if(!username || !password || !email || !user_type) {
         res.status(400).json({error: "Please provide username, password, email and user_type to register"});
     } else {
-         next();
+        if(user_type == 'operator' || user_type == 'diner') {
+            next();
+        } else {
+            res.status(400).json({error: 'Invalid User Type'});
+        }
     }
     
 }

@@ -13,15 +13,6 @@ server.get('/', (req, res) => {
     .catch(err => res.status(500).json(err));
 })
 
-async function validateTruckID(req, res, next) {
-    let truck_id = req.params.id;
-    const truck = await diner.getTruckByID(truck_id); 
-    if(truck) {
-        next();
-    } else {
-        res.status(404).json({error: 'Invalid Truck ID'});
-    }
-}
 // will retreive a list of items sold by the truck who's id is given
 server.get('/:id/menu', validateTruckID, (req, res) => {
     let truck_id = req.params.id
@@ -49,10 +40,25 @@ server.get('/visited', (req,res) => {
 })
 
 // submits a checkin that registers the truck to the users visited list
-server.post('/:id/checkin', (req,res) => {
+server.post('/:id/checkin', validateTruckID, async (req,res) => {
     let truck = {}
     truck.truck_id = req.params.id
     truck.diner_id = req.decodedToken.userId
+
+    // check if truck is already marked checkedIn
+    const visitedTrucks = await diner.getVisited(truck.diner_id);
+    let found = false;
+
+    visitedTrucks.map(t => {
+        if(t.truck_id == truck.truck_id){
+            found = true;
+        }
+    });
+    if(found){
+        res.status(400).json({error: 'Truck already checked in'});
+        return;
+    }
+
     diner.truckCheckIn(truck)
     .then( success => {
         res.status(201).json({message: "user successfully checked in"})
@@ -61,22 +67,29 @@ server.post('/:id/checkin', (req,res) => {
 })
 
 // an update to checked in trucks that allows user to submit a rating or mark as a favorite
-server.put('/:id/updateVisit', (req,res) => {
+server.put('/:id/updateVisit', validateTruckID, (req,res) => {
     let update = {}
     update.truck_id = req.params.id
     update.diner_id = req.decodedToken.userId
-    if(req.body.favorite){
-        update.favorite = req.body.favorite
+    if(req.body.favorite != undefined){
+        if(req.body.favorite == true || req.body.favorite == false) {
+            update.favorite = req.body.favorite;
+        } else {
+            res.status(401).json({error: 'Please provide a boolean as favorite value'});
+            return;
+        }
     }
     if(req.body.rating){
         if(req.body.rating > 5 || req.body.rating < 0) {
-            res.status(401).json({message: "user rating must be within 0-5"})
+            res.status(401).json({error: "user rating must be within 0-5"});
+            return;
         } else {
-            update.rating = req.body.rating
+            update.rating = req.body.rating;
         }
     }
-    if(!req.body.favorite && !req.body.rating){
-        res.status(401).json({message: "user must update something."})
+    if(req.body.favorite == undefined && !req.body.rating){
+        res.status(401).json({message: "user must update something."});
+        return;
     }
 
     diner.visitUpdate(update)
@@ -88,13 +101,14 @@ server.put('/:id/updateVisit', (req,res) => {
 
 
 // allows user to post ratings for items at food trucks
-server.post('/:id/menu/:itemId', (req,res) => {
+server.post('/:id/menu/:itemId', validateTruckID, validateItemID, (req,res) => {
     let item = {}
     item.item_id = req.params.itemId
     item.diner_id = req.decodedToken.userId
     item.rating = req.body.rating
     if(req.body.rating > 5 || req.body.rating < 0) {
-        res.status(401).json({message: "user rating must be within 0-5"})
+        res.status(401).json({message: "user rating must be within 0-5"});
+        return;
     } 
     diner.itemRating(item)
     .then( success => {
@@ -117,9 +131,29 @@ server.get('/trucksNearMe', (req, res) => {
 server.get('/trucksByCuisine', (req, res) => {
     diner.getTrucksByCuisine(req.decodedToken.userId, req.body.cuisine)
         .then(trucks => {
-            res.status(201).json(trucks)
+            res.status(201).json({trucks: trucks})
         })
         .catch(err => res.status(500).json(err));
 })
+
+async function validateTruckID(req, res, next) {
+    let truck_id = req.params.id;
+    const truck = await diner.getTruckByID(truck_id); 
+    if(truck) {
+        next();
+    } else {
+        res.status(404).json({error: 'Invalid Truck ID'});
+    }
+}
+
+async function validateItemID(req, res, next) {
+    let item_id = req.params.itemId;
+    const item = await diner.getItemByID(item_id); 
+    if(item) {
+        next();
+    } else {
+        res.status(404).json({error: 'Invalid Item ID'});
+    }
+}
 
 module.exports = server
